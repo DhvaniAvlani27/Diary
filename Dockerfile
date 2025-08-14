@@ -1,42 +1,27 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container 
-# and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# ===========================
-# 1. Base image (runtime)
-# ===========================
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-# ===========================
-# 2. Build stage
-# ===========================
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project file and restore
+# Copy project file and restore dependencies
 COPY ["DiaryApp.csproj", "./"]
-RUN dotnet restore "DiaryApp.csproj"
+RUN dotnet restore
 
 # Copy all source code
 COPY . .
 
-# Build project
-RUN dotnet build "DiaryApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Build and publish
+RUN dotnet build --configuration Release --no-restore
+RUN dotnet publish --configuration Release --output /app/publish --no-build
 
-# ===========================
-# 3. Publish stage
-# ===========================
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "DiaryApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# ===========================
-# 4. Final stage
-# ===========================
-FROM base AS final
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Copy published app
+COPY --from=build /app/publish .
+
+# Expose port
+EXPOSE 8080
+
+# Set entry point
 ENTRYPOINT ["dotnet", "DiaryApp.dll"]
