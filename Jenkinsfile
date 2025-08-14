@@ -13,6 +13,38 @@ pipeline {
             }
         }
 
+        stage('Install .NET SDK') {
+            steps {
+                script {
+                    try {
+                        def dotnetVersion = sh(script: 'dotnet --version', returnStdout: true).trim()
+                        echo "Current .NET version: ${dotnetVersion}"
+                    } catch (Exception e) {
+                        error """
+                        .NET SDK is not installed on this Jenkins server!
+                        
+                        Please install .NET SDK 8.0 on your Jenkins server:
+                        
+                        For Ubuntu/Debian:
+                        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                        sudo dpkg -i packages-microsoft-prod.deb
+                        sudo apt-get update
+                        sudo apt-get install -y apt-transport-https
+                        sudo apt-get install -y dotnet-sdk-8.0
+                        
+                        For CentOS/RHEL:
+                        sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+                        sudo yum install dotnet-sdk-8.0
+                        
+                        For Amazon Linux:
+                        sudo rpm -Uvh https://packages.microsoft.com/config/amazonlinux/2/latest/packages-microsoft-prod.rpm
+                        sudo yum install dotnet-sdk-8.0
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Restore') {
             steps {
                 sh 'dotnet restore DiaryApp.csproj'
