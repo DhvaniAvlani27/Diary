@@ -3,93 +3,67 @@ pipeline {
 
     environment {
         IMAGE_NAME = "diaryapp"
-        IMAGE_TAG = "dev"
+        IMAGE_TAG = "latest"
+        CONTAINER_NAME = "diaryapp-container"
+        HOST_PORT = "8081"
+        CONTAINER_PORT = "8080"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/DhvaniAvlani27/Diary.git'
+                echo 'Checking out code from Git...'
+                checkout scm
             }
         }
 
-        stage('Install .NET SDK') {
+        stage('Build & Test') {
             steps {
-                script {
-                    try {
-                        def dotnetVersion = sh(script: 'dotnet --version', returnStdout: true).trim()
-                        echo "Current .NET version: ${dotnetVersion}"
-                    } catch (Exception e) {
-                        error """
-                        .NET SDK is not installed on this Jenkins server!
-                        
-                        Please install .NET SDK 8.0 on your Jenkins server:
-                        
-                        For Ubuntu/Debian:
-                        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-                        sudo dpkg -i packages-microsoft-prod.deb
-                        sudo apt-get update
-                        sudo apt-get install -y apt-transport-https
-                        sudo apt-get install -y dotnet-sdk-8.0
-                        
-                        For CentOS/RHEL:
-                        sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-                        sudo yum install dotnet-sdk-8.0
-                        
-                        For Amazon Linux:
-                        sudo rpm -Uvh https://packages.microsoft.com/config/amazonlinux/2/latest/packages-microsoft-prod.rpm
-                        sudo yum install dotnet-sdk-8.0
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Restore') {
-            steps {
-                sh 'dotnet restore DiaryApp.csproj'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'dotnet build DiaryApp.csproj -c Release --no-restore'
-            }
-        }
-
-        stage('Test') {
-            steps {
+                echo 'Building .NET application...'
+                sh 'dotnet restore'
+                sh 'dotnet build --configuration Release --no-restore'
                 sh 'dotnet test --no-build'
-            }
-        }
-
-        stage('Publish') {
-            steps {
-                sh 'dotnet publish DiaryApp.csproj -c Release -o out --no-build'
+                sh 'dotnet publish --configuration Release --output ./publish --no-build'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                echo 'Building Docker image...'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker images ${IMAGE_NAME}:${IMAGE_TAG}'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker stop $IMAGE_NAME || true'
-                sh 'docker rm $IMAGE_NAME || true'
-                sh 'docker run -d --name $IMAGE_NAME -p 8081:8080 $IMAGE_NAME:$IMAGE_TAG'
+                echo 'Deploying application...'
+                script {
+                    // Stop and remove existing container if it exists
+                    sh 'docker stop ${CONTAINER_NAME} || true'
+                    sh 'docker rm ${CONTAINER_NAME} || true'
+                    
+                    // Run new container
+                    sh 'docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:${IMAGE_TAG}'
+                    
+                    // Verify container is running
+                    sh 'docker ps | grep ${CONTAINER_NAME}'
+                }
             }
         }
     }
 
     post {
-        always {
-            echo "Pipeline finished!"
+        success {
+            echo 'Pipeline completed successfully!'
+            echo "Application deployed at: http://localhost:${HOST_PORT}"
         }
         failure {
-            echo "Pipeline failed! Check logs."
+            echo 'Pipeline failed! Check the logs above for errors.'
+        }
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs()
         }
     }
 }
