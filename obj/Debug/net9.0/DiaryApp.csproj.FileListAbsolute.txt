@@ -198,3 +198,4 @@ C:\Users\dhvani\source\repos\Diary\DiaryApp\bin\Debug\net9.0\runtimes\win\lib\ne
 C:\Users\dhvani\source\repos\Diary\DiaryApp\obj\Debug\net9.0\DiaryApp.csproj.Up2Date
 C:\Users\dhvani\source\repos\Diary\DiaryApp\obj\Debug\net9.0\compressed\hayophprdp-32qyzz7o3x.gz
 C:\Users\dhvani\source\repos\Diary\DiaryApp\obj\Debug\net9.0\compressed\18rhluk5wq-rgpzpuyeej.gz
+C:\Users\dhvani\source\repos\Diary\DiaryApp\obj\Debug\net9.0\DiaryApp.sourcelink.json

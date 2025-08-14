@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1Dr5Ifm3Jxg=",
+  "dgSpecHash": "5zY10Y3zMD8=",
   "success": true,
   "projectFilePath": "C:\\Users\\dhvani\\source\\repos\\Diary\\DiaryApp\\DiaryApp.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,7 @@
     "C:\\Users\\dhvani\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\dhvani\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\dhvani\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\dhvani\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512",
     "C:\\Users\\dhvani\\.nuget\\packages\\mono.texttemplating\\3.0.0-preview-0052-g5d0f76c785\\mono.texttemplating.3.0.0-preview-0052-g5d0f76c785.nupkg.sha512",
     "C:\\Users\\dhvani\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\dhvani\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",
