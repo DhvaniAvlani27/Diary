@@ -12,7 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 // Make Kestrel listen on all network interfaces (required for Docker)
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080); // Container port
+    options.ListenAnyIP(5298); // Match launchSettings.json
 });
 
 var app = builder.Build();
@@ -25,6 +25,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Ensure static files are served
 app.UseRouting();
 app.UseAuthorization();
 
