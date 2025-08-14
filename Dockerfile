@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 5298
 
 # Set entry point
 ENTRYPOINT ["dotnet", "DiaryApp.dll"]
