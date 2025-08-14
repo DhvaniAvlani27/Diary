@@ -9,11 +9,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Make Kestrel listen on all network interfaces (required for Docker)
-builder.WebHost.ConfigureKestrel(options =>
+// Configure Kestrel based on environment
+if (builder.Environment.IsDevelopment())
 {
-    options.ListenAnyIP(5298); // Match launchSettings.json
-});
+    // Local development port
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(5298);
+    });
+}
+else
+{
+    // Production/Docker port
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(8080);
+    });
+}
 
 var app = builder.Build();
 
