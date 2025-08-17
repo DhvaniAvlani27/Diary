@@ -54,3 +54,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Test comment for CI/CD auto-trigger
