@@ -37,19 +37,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application with Docker Compose...'
+                echo 'Deploying application...'
                 script {
-                    // Stop and remove existing containers
-                    sh 'docker-compose down || true'
+                    // Stop and remove existing container if it exists
+                    sh 'docker stop ${CONTAINER_NAME} || true'
+                    sh 'docker rm ${CONTAINER_NAME} || true'
                     
-                    // Start services with Docker Compose
-                    sh 'docker-compose up -d --build'
+                    // Run new container with database connection
+                    sh 'docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} --network diaryapp_diary-network ${IMAGE_NAME}:${IMAGE_TAG}'
                     
-                    // Wait for services to be ready
-                    sh 'sleep 30'
-                    
-                    // Verify containers are running
-                    sh 'docker-compose ps'
+                    // Verify container is running
+                    sh 'docker ps | grep ${CONTAINER_NAME}'
                 }
             }
         }
