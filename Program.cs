@@ -30,13 +30,21 @@ else
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
+    // Development: Show detailed errors
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Production: Use custom error pages
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+    
+    // Ensure HTTPS in production
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles(); // Ensure static files are served
 app.UseRouting();
 app.UseAuthorization();
