@@ -37,17 +37,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
+                echo 'Deploying application with Docker Compose...'
                 script {
-                    // Stop and remove existing container if it exists
-                    sh 'docker stop ${CONTAINER_NAME} || true'
-                    sh 'docker rm ${CONTAINER_NAME} || true'
+                    // Stop and remove existing containers
+                    sh 'docker-compose down || true'
                     
-                    // Run new container
-                    sh 'docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:${IMAGE_TAG}'
+                    // Start services with Docker Compose
+                    sh 'docker-compose up -d --build'
                     
-                    // Verify container is running
-                    sh 'docker ps | grep ${CONTAINER_NAME}'
+                    // Wait for services to be ready
+                    sh 'sleep 30'
+                    
+                    // Verify containers are running
+                    sh 'docker-compose ps'
                 }
             }
         }
