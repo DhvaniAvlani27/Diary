@@ -44,7 +44,7 @@ pipeline {
                     sh 'docker rm ${CONTAINER_NAME} || true'
                     
                     // Run new container with database connection
-                    sh 'docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} --network diary_diary-network ${IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} --network diaryapp_diary-network ${IMAGE_NAME}:${IMAGE_TAG}'
                     
                     // Verify container is running
                     sh 'docker ps | grep ${CONTAINER_NAME}'
