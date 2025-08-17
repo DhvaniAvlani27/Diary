@@ -24,9 +24,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
   </ItemGroup>	
 
-  <!-- This removes all wwwroot files so they don't conflict -->
-  <ItemGroup>
-    <Content Remove="wwwroot\**" />
-  </ItemGroup>
+
 
 </Project>
