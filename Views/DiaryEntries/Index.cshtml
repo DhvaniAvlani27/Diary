@@ -1,0 +1,60 @@
+﻿@model List<DiaryEntry>
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <a class="btn btn-primary" asp-controller="DiaryEntries" asp-action="Create">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-plus-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5z" />
+                </svg>
+            Create new Diary Entry
+            </a>
+
+        </div>
+        <div class="col-6 text-end">
+            <h2>DiaryEntries</h2>
+         </div>
+     </div>
+</div>
+        
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var entry in Model)
+            {
+                <tr>
+                    <td>@entry.Title</td>
+                    <td>@entry.Content </td>
+                    <td>@entry.Created </td>
+                   
+                    <td>
+                        <a asp-controller="DiaryEntries" asp-action="Edit" asp-route-id="@entry.Id" class="btn btn-primary btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+                            </svg>
+                            Edit
+                        </a>
+
+                        <a asp-controller="DiaryEntries" asp-action="Delete" asp-route-id="@entry.Id" class="btn btn-danger btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                            </svg>
+                            Delete
+                        </a>
+                    </td>
+        
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

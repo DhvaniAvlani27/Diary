@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # SQL Server Database
+  sqlserver:
+    container_name: diaryapp-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+      - MSSQL_PID=Express
+      - MSSQL_AGENT_ENABLED=true
+    ports:
+      - "8082:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - diary-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  diary-network:
+    driver: bridge
